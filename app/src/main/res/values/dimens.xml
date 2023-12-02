@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layout_height_default">70dp</dimen>
+    <dimen name="layout_50dp">50dp</dimen>
+    <dimen name="layout_0dp">0dp</dimen>
+    <dimen name="layout_margin_1px">1px</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="text_size_70sp">70sp</dimen>
+    <dimen name="text_size_50sp">50sp</dimen>
+    <dimen name="layour_margin_1px">1px</dimen>
+    <dimen name="text_size_55sp">55sp</dimen>
+    <dimen name="layout_55dp">55dp</dimen>
+</resources>
