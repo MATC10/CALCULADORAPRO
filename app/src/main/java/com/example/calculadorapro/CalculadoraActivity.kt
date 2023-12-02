@@ -648,6 +648,5 @@ class CalculadoraActivity : AppCompatActivity() {
         }
         return firstNumber
     }
-
 }
 
