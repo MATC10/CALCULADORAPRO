@@ -86,9 +86,6 @@ class CalculadoraActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        btnCe.setOnClickListener {
-
-        }
         tvHistory.setOnClickListener {
             //EASTER EGG: si lo clickeas diez veces sale el nombre de LuisRe
             easterEggLuisRe()
@@ -101,9 +98,7 @@ class CalculadoraActivity : AppCompatActivity() {
         }
 
         btnCe.setOnClickListener {
-            actualNumber = ""
-            insertChanger()
-            caseOfError()
+            softResetCe()
         }
         btnC.setOnClickListener {
             clear()
@@ -192,6 +187,18 @@ class CalculadoraActivity : AppCompatActivity() {
         calculateEquals2()
     }
 
+    private fun softResetCe(){
+        if(tvHistory.text.isNotEmpty() && tvHistory.text.contains("√-")){
+            clear()
+            tvHistory.text = ""
+            tvInsertNumber.text = "0"
+            tvInstantResult.text = "0"
+            caseOfError("ERROR")
+        }else{
+            actualNumber = ""
+            insertChanger()
+        }
+    }
     private fun toHistoryCalculation(operator: String) {
         nonRepeatedOperators(operator)
         actualNumber = ""
@@ -201,8 +208,17 @@ class CalculadoraActivity : AppCompatActivity() {
 
     private fun specialInsertChanger() { //actualNumber NUNCA ESTARÁ EN "" EN PANTALLA
         if (actualNumber.contains("√")) {
-            actualNumber = "Syntax ERROR"
-            caseOfError()
+            if(valuesAfterRoot() == "0" || valuesAfterRoot() == "0.0"){
+                //no hacer nada
+            }
+            else{
+                operationHistory += "√-${valuesAfterRoot()}"
+                tvHistory.text = operationHistory
+                actualNumber = "Syntax ERROR"
+                tvInstantResult.text = "Syntax ERROR"
+                caseOfError()
+            }
+
         } //si actualNumber contiene "√" y ponemos en negativo, da error. Esto identifica los elementos después del "√": actualNumber.substring(actualNumber.indexOf("√") + 1)
         else if (actualNumber.isNotEmpty() && actualNumber.toDouble() > 0) { //comprobamos que no esté vacío actual number
             actualNumber = "-${actualNumber}"
@@ -210,6 +226,15 @@ class CalculadoraActivity : AppCompatActivity() {
             actualNumber = actualNumber.substring(1) //quita el primer dígito, en este caso el "-"
         }
         tvInsertNumber.text = actualNumber
+    }
+
+    private fun valuesAfterRoot(): String{
+        val index = actualNumber.indexOf("√")
+        if (index != -1) {
+            val afterRoot = actualNumber.substring(index + 1)
+            return afterRoot
+        }
+        return ""
     }
 
     private fun rootCalculation() {
@@ -236,8 +261,7 @@ class CalculadoraActivity : AppCompatActivity() {
 
     private fun nonRepeatedOperators(operator: String) {
         if (actualNumber.isNotEmpty() && actualNumber.last().toString() == "√" && operator == "-") {
-            actualNumber = "Syntax ERROR"
-            caseOfError("ERROR")
+            actualNumber += "0-"
         }
         if (actualNumber.isNotEmpty() && actualNumber.last()
                 .toString() == "."
